@@ -7,7 +7,7 @@ export class Photo extends EntityWithSequence{
     constructor() {
         super();
     }
-    @NextVal('test12.ID_ORDERS_seq')
+    @NextVal('seq')
     @PrimaryColumn({name:'id'})
     id: number
     @Column({length:100})

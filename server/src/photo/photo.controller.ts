@@ -17,7 +17,7 @@ export class PhotoController {
         return this.photoService.findOne(id);
     }
     @Post()
-    async create(@Body() newPhoto:Omit<Photo,'id'>):Promise<Photo>{
+    async create(@Body() newPhoto:Omit<Photo,'id'>){
         return this.photoService.create(newPhoto);
     }
 }

@@ -11,13 +11,18 @@ export class PhotoService {
     }
 
     async findAll() {
-        return this.photoRepository.find();
+        //return this.photoRepository.find();
+        const pr = this.photoRepository.manager.getRepository(Photo);
+        const photos = await pr
+            .createQueryBuilder("photo")
+            .innerJoinAndSelect("photo.metadata", "metadata")
+            .getMany();
+        return photos;
     }
 
     async findOne(id: string) {
         //return this.photoRepository.findOne(id);
         return this.photoRepository.findAndCount()
-
     }
 
     async create(newPhoto: Omit<Photo, 'id'>) {

@@ -3,7 +3,7 @@ import {
     Column,
     PrimaryGeneratedColumn,
     OneToOne,
-    JoinColumn, PrimaryColumn,
+    JoinColumn, PrimaryColumn, Relation,
 } from "typeorm"
 import {Photo} from "./photo.model";
 import {EntityWithSequence, NextVal} from "typeorm-sequence-oracle-fixed";
@@ -33,7 +33,7 @@ export class PhotoMetadata extends EntityWithSequence{
     @Column()
     comment: string
 
-    @OneToOne(() => Photo)
+    @OneToOne(type => Photo,(photo)=>photo.metadata)
     @JoinColumn()
-    photo: Photo
+    photo: Relation<Photo>
 }

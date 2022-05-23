@@ -1,0 +1,11 @@
+{
+  "type": "oracle",
+  "host": "192.168.96.106",
+  "port": 1521,
+  "connectString": "(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.96.106)(PORT = 1521))(CONNECT_DATA =(SID=oratest1)))",
+  "sid": "oratest1",
+  "username": "cake",
+  "password": "cake",
+  "entities": ["dist/**/*.model{.ts,.js}"],
+  "synchronize": true
+}

@@ -6,6 +6,6 @@
   "sid": "oratest1",
   "username": "cake",
   "password": "cake",
-  "entities": ["dist/**/*.model{.ts,.js}"],
+  "entities": ["dist/**/*.model{.ts,.js}", "dist/**/*.entity{.ts,.js}"],
   "synchronize": true
 }

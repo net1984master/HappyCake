@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import {TypeOrmModule} from "@nestjs/typeorm";
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { PhotoModule } from './photo/photo.module';
 import { TestUserModule } from './test-user/test-user.module';
+import { FillingModule } from './filling/filling.module';
+
 
 //     type: 'oracle',
 //     host: '192.168.96.106',
@@ -15,13 +17,12 @@ import { TestUserModule } from './test-user/test-user.module';
 //     entities: [__dirname + '/**/*.model{.ts,.js}'],
 //     synchronize: true,
 
-
-
 @Module({
   imports: [
-      TypeOrmModule.forRoot(),
-      PhotoModule,
-      TestUserModule
+    TypeOrmModule.forRoot(),
+    PhotoModule,
+    TestUserModule,
+    FillingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

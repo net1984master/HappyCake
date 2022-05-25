@@ -1,8 +1,13 @@
 <template>
   <div class="app">
     <h1>Страница с постами</h1>
-    <my-button @click="showDialog=true" style="margin: 15px 0">Создать пост</my-button>
-    <my-dialog v-model:show="showDialog"><PostForm @create="createPost"></PostForm></my-dialog>
+    <my-button @click="fetchPosts">Получить посты</my-button>
+    <my-button @click="showDialog = true" style="margin: 15px 0"
+      >Создать пост</my-button
+    >
+    <my-dialog v-model:show="showDialog"
+      ><PostForm @create="createPost"></PostForm
+    ></my-dialog>
     <PostList v-bind:posts="posts" @remove="removePost"></PostList>
   </div>
 </template>
@@ -10,8 +15,9 @@
 <script>
 import PostList from '@/components/PostList';
 import PostForm from '@/components/PostForm';
-import MyDialog from "@/components/UI/MyDialog";
-import MyButton from "@/components/UI/MyButton";
+import MyDialog from '@/components/UI/MyDialog';
+import MyButton from '@/components/UI/MyButton';
+import axios from 'axios';
 
 export default {
   components: {
@@ -22,11 +28,7 @@ export default {
   },
   data() {
     return {
-      posts: [
-        { id: 1, title: 'JavaScript', body: 'description' },
-        { id: 2, title: 'JavaScript', body: 'description' },
-        { id: 3, title: 'JavaScript', body: 'description' },
-      ],
+      posts: [],
       title: '',
       body: '',
       showDialog: false,
@@ -40,6 +42,16 @@ export default {
     },
     removePost(post) {
       this.posts = this.posts.filter((p) => p.id !== post.id);
+    },
+    async fetchPosts() {
+      try {
+        const response = await axios.get(
+          'https://jsonplaceholder.typicode.com/posts?_limit=10',
+        );
+        this.posts = response.data;
+      } catch (e) {
+        alert('Ошибка');
+      }
     },
   },
 };

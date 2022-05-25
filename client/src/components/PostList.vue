@@ -1,11 +1,14 @@
 <template>
+<div v-if="posts.length>0">
   <h4>Text</h4>
   <post-item
-    v-for="post in posts"
-    :post="post"
-    :key="post.id"
-    @remove="$emit('remove', post)"
+      v-for="post in posts"
+      :post="post"
+      :key="post.id"
+      @remove="$emit('remove', post)"
   />
+</div>
+  <h2 v-else>Постов нет</h2>
 </template>
 
 <script>

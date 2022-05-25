@@ -13,15 +13,15 @@
       type="text"
       placeholder="Описание"
     />
-    <my-button style="align-self: end" @click="createPost">Создать</my-button>
+    <my-button style="align-self: end; margin-top: 15px" @click="createPost"
+      >Создать</my-button
+    >
   </form>
 </template>
 
 <script>
-import MyButton from '@/components/UI/MyButton';
 export default {
   name: 'PostForm',
-  components: { MyButton },
   data() {
     return {
       post: {

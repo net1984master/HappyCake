@@ -1,6 +1,5 @@
 <template>
 <div v-if="posts.length>0">
-  <h4>Text</h4>
   <post-item
       v-for="post in posts"
       :post="post"

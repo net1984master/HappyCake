@@ -1,7 +1,6 @@
 <template>
   <div class="app">
     <h1>Страница с постами</h1>
-    <my-button @click="fetchPosts">Получить посты</my-button>
     <my-button @click="showDialog = true" style="margin: 15px 0"
       >Создать пост</my-button
     >
@@ -54,6 +53,9 @@ export default {
       }
     },
   },
+  mounted() {
+    this.fetchPosts();
+  }
 };
 </script>
 

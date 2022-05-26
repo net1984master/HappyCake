@@ -15,24 +15,23 @@
       v-if="!isPostsLoading"
     ></PostList>
     <h1 v-else>Идёт загрузка...</h1>
-    <pages-pagination
-      style="margin-top: 15px"
-      :total-pages="totalPage"
-      :current-page="page"
-      @change="changePage"
-    />
+    <!--    <pages-pagination-->
+    <!--      style="margin-top: 15px"-->
+    <!--      :total-pages="totalPage"-->
+    <!--      :current-page="page"-->
+    <!--      @change="changePage"-->
+    <!--    />-->
   </div>
+  <div ref="observer" class="observer"></div>
 </template>
 
 <script>
 import PostList from '@/components/PostList';
 import PostForm from '@/components/PostForm';
 import axios from 'axios';
-import PagesPagination from '@/components/PagesPagination';
 
 export default {
   components: {
-    PagesPagination,
     PostList,
     PostForm,
   },
@@ -46,7 +45,7 @@ export default {
       selectedSort: '',
       searchValue: '',
       page: 1,
-      limit: 5,
+      limit: 25,
       totalPage: 0,
       sortOptions: [
         { value: 'title', name: 'По названию' },
@@ -57,7 +56,6 @@ export default {
   },
   methods: {
     createPost(post) {
-      console.log(post);
       this.posts.push(post);
       this.showDialog = false;
     },
@@ -86,19 +84,49 @@ export default {
         this.isPostsLoading = false;
       }
     },
-    changePage(newPage) {
-      this.page = newPage;
+    async loadMorePosts() {
+      try {
+        this.page++;
+        const response = await axios.get(
+          'https://jsonplaceholder.typicode.com/posts?',
+          {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            },
+          },
+        );
+        this.posts = [...this.posts, ...response.data];
+        this.totalPage = Math.ceil(
+          response.headers['x-total-count'] / this.limit,
+        );
+      } catch (e) {
+        alert('Ошибка');
+      }
     },
+    // changePage(newPage) {
+    //   this.page = newPage;
+    // },
   },
   mounted() {
     this.fetchPosts();
+    const options = {
+      rootMargin: '0px',
+      threshold: 1.0,
+    };
+    const callback = (entries, observer) => {
+      if (entries[0].isIntersecting && this.page < this.totalPage) {
+        this.loadMorePosts();
+      }
+    };
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer);
   },
   computed: {
     sortedPost() {
       const newArray = [...this.posts];
       const newValue = this.selectedSort;
       newArray.sort((post1, post2) => {
-        console.log(typeof post1[newValue]);
         if (typeof post1[newValue] === 'string') {
           return post1[newValue]?.localeCompare(post2[newValue]);
         } else if (typeof post1[newValue] === 'number') {
@@ -114,9 +142,9 @@ export default {
     },
   },
   watch: {
-    page(){
-      this.fetchPosts();
-    }
+    // page() {
+    //   this.fetchPosts();
+    // },
     // selectedSort(newValue) {
     //   this.posts.sort((post1, post2) => {
     //     if (typeof post1[newValue] === 'string') {
@@ -144,5 +172,9 @@ export default {
     display: flex;
     justify-content: space-between;
   }
+}
+.observer {
+  height: 30px;
+  background: green;
 }
 </style>

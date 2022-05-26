@@ -15,6 +15,12 @@
       v-if="!isPostsLoading"
     ></PostList>
     <h1 v-else>Идёт загрузка...</h1>
+    <pages-pagination
+      style="margin-top: 15px"
+      :total-pages="totalPage"
+      :current-page="page"
+      @change="changePage"
+    />
   </div>
 </template>
 
@@ -22,9 +28,11 @@
 import PostList from '@/components/PostList';
 import PostForm from '@/components/PostForm';
 import axios from 'axios';
+import PagesPagination from '@/components/PagesPagination';
 
 export default {
   components: {
+    PagesPagination,
     PostList,
     PostForm,
   },
@@ -37,6 +45,9 @@ export default {
       isPostsLoading: false,
       selectedSort: '',
       searchValue: '',
+      page: 1,
+      limit: 5,
+      totalPage: 0,
       sortOptions: [
         { value: 'title', name: 'По названию' },
         { value: 'body', name: 'По описанию' },
@@ -57,14 +68,26 @@ export default {
       try {
         this.isPostsLoading = true;
         const response = await axios.get(
-          'https://jsonplaceholder.typicode.com/posts?_limit=10',
+          'https://jsonplaceholder.typicode.com/posts?',
+          {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            },
+          },
         );
         this.posts = response.data;
+        this.totalPage = Math.ceil(
+          response.headers['x-total-count'] / this.limit,
+        );
       } catch (e) {
         alert('Ошибка');
       } finally {
         this.isPostsLoading = false;
       }
+    },
+    changePage(newPage) {
+      this.page = newPage;
     },
   },
   mounted() {
@@ -91,6 +114,9 @@ export default {
     },
   },
   watch: {
+    page(){
+      this.fetchPosts();
+    }
     // selectedSort(newValue) {
     //   this.posts.sort((post1, post2) => {
     //     if (typeof post1[newValue] === 'string') {

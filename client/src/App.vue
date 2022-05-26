@@ -1,6 +1,7 @@
 <template>
   <div class="app">
     <h1>Страница с постами</h1>
+    <my-input v-model="searchValue" />
     <div class="app__btns">
       <my-button @click="showDialog = true">Создать пост </my-button>
       <my-select v-model="selectedSort" :options="sortOptions" />
@@ -9,7 +10,7 @@
       ><PostForm @create="createPost"></PostForm
     ></my-dialog>
     <PostList
-      v-bind:posts="sortedPost"
+      v-bind:posts="sortedAndFilteredPosts"
       @remove="removePost"
       v-if="!isPostsLoading"
     ></PostList>
@@ -20,16 +21,10 @@
 <script>
 import PostList from '@/components/PostList';
 import PostForm from '@/components/PostForm';
-import MyDialog from '@/components/UI/MyDialog';
-import MyButton from '@/components/UI/MyButton';
 import axios from 'axios';
-import MySelect from '@/components/UI/MySelect';
 
 export default {
   components: {
-    MySelect,
-    MyButton,
-    MyDialog,
     PostList,
     PostForm,
   },
@@ -41,6 +36,7 @@ export default {
       showDialog: false,
       isPostsLoading: false,
       selectedSort: '',
+      searchValue: '',
       sortOptions: [
         { value: 'title', name: 'По названию' },
         { value: 'body', name: 'По описанию' },
@@ -87,6 +83,11 @@ export default {
         }
       });
       return newArray;
+    },
+    sortedAndFilteredPosts() {
+      return this.sortedPost.filter((post) =>
+        post['title'].toLowerCase().includes(this.searchValue.toLowerCase()),
+      );
     },
   },
   watch: {

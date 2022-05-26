@@ -9,7 +9,7 @@
       ><PostForm @create="createPost"></PostForm
     ></my-dialog>
     <PostList
-      v-bind:posts="posts"
+      v-bind:posts="sortedPost"
       @remove="removePost"
       v-if="!isPostsLoading"
     ></PostList>
@@ -74,16 +74,31 @@ export default {
   mounted() {
     this.fetchPosts();
   },
-  watch: {
-    selectedSort(newValue) {
-      this.posts.sort((post1, post2) => {
+  computed: {
+    sortedPost() {
+      const newArray = [...this.posts];
+      const newValue = this.selectedSort;
+      newArray.sort((post1, post2) => {
+        console.log(typeof post1[newValue]);
         if (typeof post1[newValue] === 'string') {
           return post1[newValue]?.localeCompare(post2[newValue]);
         } else if (typeof post1[newValue] === 'number') {
           return post1[newValue] - post2[newValue];
         }
       });
+      return newArray;
     },
+  },
+  watch: {
+    // selectedSort(newValue) {
+    //   this.posts.sort((post1, post2) => {
+    //     if (typeof post1[newValue] === 'string') {
+    //       return post1[newValue]?.localeCompare(post2[newValue]);
+    //     } else if (typeof post1[newValue] === 'number') {
+    //       return post1[newValue] - post2[newValue];
+    //     }
+    //   });
+    // },
   },
 };
 </script>

@@ -1,13 +1,18 @@
 <template>
   <div class="app">
     <h1>Страница с постами</h1>
-    <my-button @click="showDialog = true" style="margin: 15px 0"
-      >Создать пост</my-button
-    >
+    <div class="app__btns">
+      <my-button @click="showDialog = true">Создать пост </my-button>
+      <my-select v-model="selectedSort" :options="sortOptions"/>
+    </div>
     <my-dialog v-model:show="showDialog"
       ><PostForm @create="createPost"></PostForm
     ></my-dialog>
-    <PostList v-bind:posts="posts" @remove="removePost" v-if="!isPostsLoading"></PostList>
+    <PostList
+      v-bind:posts="posts"
+      @remove="removePost"
+      v-if="!isPostsLoading"
+    ></PostList>
     <h1 v-else>Идёт загрузка...</h1>
   </div>
 </template>
@@ -18,9 +23,11 @@ import PostForm from '@/components/PostForm';
 import MyDialog from '@/components/UI/MyDialog';
 import MyButton from '@/components/UI/MyButton';
 import axios from 'axios';
+import MySelect from '@/components/UI/MySelect';
 
 export default {
   components: {
+    MySelect,
     MyButton,
     MyDialog,
     PostList,
@@ -33,6 +40,12 @@ export default {
       body: '',
       showDialog: false,
       isPostsLoading: false,
+      selectedSort: '',
+      sortOptions: [
+        { value: 'title', name: 'По названию' },
+        { value: 'body', name: 'По описанию' },
+        { value: 'id', name: 'По ID' },
+      ],
     };
   },
   methods: {
@@ -47,16 +60,14 @@ export default {
     async fetchPosts() {
       try {
         this.isPostsLoading = true;
-        console.log(this.isPostsLoading);
-        setTimeout(async () => {
-          const response = await axios.get(
-            'https://jsonplaceholder.typicode.com/posts?_limit=10',
-          );
-          this.posts = response.data;
-          this.isPostsLoading = false;
-        }, 1000);
+        const response = await axios.get(
+          'https://jsonplaceholder.typicode.com/posts?_limit=10',
+        );
+        this.posts = response.data;
       } catch (e) {
         alert('Ошибка');
+      } finally {
+        this.isPostsLoading = false;
       }
     },
   },
@@ -66,7 +77,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 * {
   margin: 0;
   padding: 0;
@@ -75,5 +86,10 @@ export default {
 
 .app {
   padding: 20px;
+  &__btns {
+    margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
+  }
 }
 </style>

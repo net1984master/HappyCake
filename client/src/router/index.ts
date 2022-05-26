@@ -6,14 +6,17 @@ import About from '@/pages/About.vue';
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
+    name: 'home',
     component: Main,
   },
   {
     path: '/posts',
+    name: 'posts',
     component: PostsPage,
   },
   {
     path: '/about',
+    name: 'about',
     component: About,
   },
 ];

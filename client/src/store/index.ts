@@ -1,22 +1,20 @@
 import { createStore } from 'vuex';
+import { postModule } from '@/store/postModule';
 
 export default createStore({
-  state: {
-    likes: 0,
-  },
-  getters: {
-    doubleLikes(state) {
-      return state.likes * 2;
-    }
-  },
-  mutations: {
-    incrementLikes(state){
-      state.likes++;
-    },
-    decrementLikes(state){
-      state.likes--;
-    },
-  },
-  actions: {},
-  modules: {},
+  modules: { post: postModule },
 });
+
+export interface PostPage {
+  posts: [any];
+  title: string;
+  body: string;
+  showDialog: boolean;
+  isPostsLoading: boolean;
+  selectedSort: string;
+  searchValue: string;
+  page: number;
+  limit: number;
+  totalPage: number;
+  sortOptions: [];
+}

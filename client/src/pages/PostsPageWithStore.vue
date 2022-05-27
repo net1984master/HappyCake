@@ -1,13 +1,14 @@
 <template>
   <div>
-    <h1>{{ $store.getters.doubleLikes }}</h1>
-    <my-button @click="$store.commit('incrementLikes')">+</my-button>
-    <my-button @click="$store.commit('decrementLikes')">-</my-button>
     <h1>Страница с постами</h1>
-    <my-input v-model="searchValue" />
+    <my-input :model-value="searchValue" @update:model-value="setSearchValue" />
     <div class="app__btns">
       <my-button @click="showDialog = true">Создать пост </my-button>
-      <my-select v-model="selectedSort" :options="sortOptions" />
+      <my-select
+        :model-value="selectedSort"
+        @update:model-value="setSelectedSort"
+        :options="sortOptions"
+      />
     </div>
     <my-dialog v-model:show="showDialog"
       ><PostForm @create="createPost"></PostForm
@@ -18,21 +19,17 @@
       v-if="!isPostsLoading"
     ></PostList>
     <h1 v-else>Идёт загрузка...</h1>
-    <!--    <pages-pagination-->
-    <!--      style="margin-top: 15px"-->
-    <!--      :total-pages="totalPage"-->
-    <!--      :current-page="page"-->
-    <!--      @change="changePage"-->
-    <!--    />-->
   </div>
-  <div v-intersection="{ run: loadMorePosts, need: needRun }" class="observer"></div>
-  <!--  <div ref="observer" class="observer"></div>-->
+  <div
+    v-intersection="{ run: loadMorePosts, need: needRun }"
+    class="observer"
+  ></div>
 </template>
 
 <script>
 import PostList from '@/components/PostList';
 import PostForm from '@/components/PostForm';
-import axios from 'axios';
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
 
 export default {
   name: 'PostsPageWithStore',
@@ -42,24 +39,19 @@ export default {
   },
   data() {
     return {
-      posts: [],
-      title: '',
-      body: '',
       showDialog: false,
-      isPostsLoading: false,
-      selectedSort: '',
-      searchValue: '',
-      page: 1,
-      limit: 25,
-      totalPage: 0,
-      sortOptions: [
-        { value: 'title', name: 'По названию' },
-        { value: 'body', name: 'По описанию' },
-        { value: 'id', name: 'По ID' },
-      ],
     };
   },
   methods: {
+    ...mapMutations({
+      setPage: 'post/setPage',
+      setSearchValue: 'post/setSearchValue',
+      setSelectedSort: 'post/setSelectedSort',
+    }),
+    ...mapActions({
+      loadMorePosts: 'post/loadMorePosts',
+      fetchPosts: 'post/fetchPosts',
+    }),
     createPost(post) {
       this.posts.push(post);
       this.showDialog = false;
@@ -67,90 +59,29 @@ export default {
     removePost(post) {
       this.posts = this.posts.filter((p) => p.id !== post.id);
     },
-    async fetchPosts() {
-      try {
-        this.isPostsLoading = true;
-        const response = await axios.get(
-          'https://jsonplaceholder.typicode.com/posts?',
-          {
-            params: {
-              _page: this.page,
-              _limit: this.limit,
-            },
-          },
-        );
-        this.posts = response.data;
-        this.totalPage = Math.ceil(
-          response.headers['x-total-count'] / this.limit,
-        );
-      } catch (e) {
-        alert('Ошибка');
-      } finally {
-        this.isPostsLoading = false;
-      }
-    },
-    async loadMorePosts() {
-      try {
-        this.page++;
-        const response = await axios.get(
-          'https://jsonplaceholder.typicode.com/posts?',
-          {
-            params: {
-              _page: this.page,
-              _limit: this.limit,
-            },
-          },
-        );
-        this.posts = [...this.posts, ...response.data];
-        this.totalPage = Math.ceil(
-          response.headers['x-total-count'] / this.limit,
-        );
-      } catch (e) {
-        alert('Ошибка');
-      }
-    },
     needRun() {
       return this.page < this.totalPage;
-    }
-    // changePage(newPage) {
-    //   this.page = newPage;
-    // },
+    },
   },
   mounted() {
     this.fetchPosts();
   },
   computed: {
-    sortedPost() {
-      const newArray = [...this.posts];
-      const newValue = this.selectedSort;
-      newArray.sort((post1, post2) => {
-        if (typeof post1[newValue] === 'string') {
-          return post1[newValue]?.localeCompare(post2[newValue]);
-        } else if (typeof post1[newValue] === 'number') {
-          return post1[newValue] - post2[newValue];
-        }
-      });
-      return newArray;
-    },
-    sortedAndFilteredPosts() {
-      return this.sortedPost.filter((post) =>
-        post['title'].toLowerCase().includes(this.searchValue.toLowerCase()),
-      );
-    },
+    ...mapState({
+      posts: (state) => state.post.posts,
+      isPostsLoading: (state) => state.post.isPostsLoading,
+      selectedSort: (state) => state.post.selectedSort,
+      searchValue: (state) => state.post.searchValue,
+      page: (state) => state.post.page,
+      totalPage: (state) => state.post.totalPage,
+      sortOptions: (state) => state.post.sortOptions,
+    }),
+    ...mapGetters({
+      sortedPost: 'post/sortedPost',
+      sortedAndFilteredPosts: 'post/sortedAndFilteredPosts',
+    }),
   },
   watch: {
-    // page() {
-    //   this.fetchPosts();
-    // },
-    // selectedSort(newValue) {
-    //   this.posts.sort((post1, post2) => {
-    //     if (typeof post1[newValue] === 'string') {
-    //       return post1[newValue]?.localeCompare(post2[newValue]);
-    //     } else if (typeof post1[newValue] === 'number') {
-    //       return post1[newValue] - post2[newValue];
-    //     }
-    //   });
-    // },
   },
 };
 </script>

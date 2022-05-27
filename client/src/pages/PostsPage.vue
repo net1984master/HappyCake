@@ -22,7 +22,7 @@
     <!--      @change="changePage"-->
     <!--    />-->
   </div>
-  <div v-intersection="{ run: loadMorePosts, page: this.page, total: this.totalPage }" class="observer"></div>
+  <div v-intersection="{ run: loadMorePosts, need: needRun }" class="observer"></div>
   <!--  <div ref="observer" class="observer"></div>-->
 </template>
 
@@ -106,6 +106,9 @@ export default {
         alert('Ошибка');
       }
     },
+    needRun() {
+      return this.page < this.totalPage;
+    }
     // changePage(newPage) {
     //   this.page = newPage;
     // },

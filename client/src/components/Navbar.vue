@@ -6,6 +6,7 @@
       <my-button style="margin-left: 15px" @click="$router.push('/about')"
         >About</my-button
       >
+      <my-button @click="$router.push('/store')">store</my-button>
     </div>
     <!--    <router-link to="/posts">Posts</router-link>-->
     <!--    <router-link to="/about">About</router-link>-->

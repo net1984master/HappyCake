@@ -1,14 +1,10 @@
-import { createStore } from 'vuex'
-
+import { createLogger, createStore } from 'vuex';
+import cakem from '@/store/modules/cakem';
+const debug = true;
 export default createStore({
-  state: {
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
   modules: {
-  }
-})
+    cakem
+  },
+  strict: debug,
+  plugins: debug ? [createLogger()] : []
+});

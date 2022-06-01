@@ -2,9 +2,9 @@ import { createStore } from 'vuex';
 import { postModule } from '@/store/postModule';
 import { cakeModule } from '@/store/cakeModule';
 
-export default createStore({
-  modules: { post: postModule, cake: cakeModule },
-});
+// export default createStore({
+//   modules: { post: postModule, cake: cakeModule },
+// });
 
 export interface PostPage {
   posts: [any];

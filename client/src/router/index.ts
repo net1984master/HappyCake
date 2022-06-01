@@ -4,6 +4,9 @@ import PostsPage from '@/pages/PostsPage.vue';
 import PostsPageWithStore from '@/pages/PostsPageWithStore.vue';
 import PostPage from '@/pages/PostPage.vue';
 import About from '@/pages/About.vue';
+import PostsPageCompositionApi from '@/pages/PostsPageCompositionApi.vue';
+import CakePageMod from '@/pages/CakePageMod.vue';
+
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -30,6 +33,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/store',
     name: 'store',
     component: PostsPageWithStore,
+  },
+  {
+    path: '/compo',
+    name: 'compo',
+    component: PostsPageCompositionApi,
+  },
+  {
+    path: '/mod/cake',
+    name: 'mcake',
+    component: CakePageMod,
   },
 ];
 

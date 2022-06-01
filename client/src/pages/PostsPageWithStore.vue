@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Страница с постами</h1>
+    <h1>Страница с постами Store</h1>
     <my-input :model-value="searchValue" @update:model-value="setSearchValue" />
     <div class="app__btns">
       <my-button @click="showDialog = true">Создать пост </my-button>

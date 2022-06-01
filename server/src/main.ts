@@ -3,8 +3,8 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const oracledb = require('oracledb');
-  oracledb.initOracleClient({libDir: 'D:\\noracle\\instantclient_21_3'});
-  const app = await NestFactory.create(AppModule);
+  oracledb.initOracleClient({ libDir: 'D:\\noracle\\instantclient_21_3' });
+  const app = await NestFactory.create(AppModule, { cors: true });
   await app.listen(3000);
 }
 bootstrap();

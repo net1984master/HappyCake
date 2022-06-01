@@ -7,6 +7,8 @@
         >About</my-button
       >
       <my-button @click="$router.push('/store')">store</my-button>
+      <my-button @click="$router.push('/compo')">compo</my-button>
+      <my-button @click="$router.push('/mod/cake')">Торты</my-button>
     </div>
     <!--    <router-link to="/posts">Posts</router-link>-->
     <!--    <router-link to="/about">About</router-link>-->

@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PhotoModule } from './photo/photo.module';
 import { TestUserModule } from './test-user/test-user.module';
 import { FillingModule } from './filling/filling.module';
+import { CakeModule } from './cake/cake.module';
 
 
 //     type: 'oracle',
@@ -23,6 +24,7 @@ import { FillingModule } from './filling/filling.module';
     PhotoModule,
     TestUserModule,
     FillingModule,
+    CakeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

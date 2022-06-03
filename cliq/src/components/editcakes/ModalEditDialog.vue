@@ -23,7 +23,7 @@
       </q-bar>
 
       <q-card-section>
-        <div class="text-h6">Alert</div>
+        <div class="text-h6">{{ $props.tytle }}</div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
@@ -39,22 +39,30 @@ import {ref} from "vue";
 export default {
   name: "ModalEditDialog",
   props: {
-    show: Boolean,
-    default: false
-  },
-  emits:['close'],
-  setup(props,param){
-    console.log(props.show);
-    function changeValue(env) {
-      if(true){
-        param.emit('close');
-      }
-    };
-    return{
-      changeValue,
-      maximizedToggle: ref(true),
+    show: {
+      type: Boolean,
+      default: false,
+    },
+    tytle:{
+      type: String,
+      default: '***'
     }
+  },
+emits:['close'],
+  setup(props, param)
+{
+  console.log(props.show);
+
+  function changeValue(env) {
+    if (true) {
+      param.emit('close');
+    }
+  };
+  return {
+    changeValue,
+    maximizedToggle: ref(true),
   }
+}
 }
 </script>
 

@@ -2,13 +2,13 @@
   <q-page>
     <div class="q-pa-md">
       <cakes-table
-        @add="addNewCake"
-        @edit="editCake"
+        @add="startAddNewCake"
+        @edit="startEditCake"
         @delete="deleteCake"
       />
 
-      <modal-edit-dialog :show="isEditMode" @close="isEditMode=false">
-        <h1>JJJJJJJ</h1>
+      <modal-edit-dialog :show="isEditMode" @close="isEditMode=false"  :tytle="operationText">
+        <cake-item/>
       </modal-edit-dialog>
     </div>
   </q-page>
@@ -26,32 +26,32 @@ export default {
   components: {ModalEditDialog, CakesTable, CakeItem},
   setup() {
     const store = useStore();
-    const isEditMode = ref(true);
+    const isEditMode = ref(false);
+    const operationText = ref('');
     onMounted(() => {
       store.dispatch('qcakem/getAll');
     });
-    function addNewCake(){
-      console.log("Добавить новый пост");
+    function startAddNewCake(){
+      store.commit('qcakem/cleanEditedItem');
+      operationText.value ='Добавить торт';
+      isEditMode.value = true;
     }
-    function editCake(id) {
-      console.log('Редактировать торт '+id)
-      //store.commit('qcakem/setEditedItem',id);
-      //openEditDialog();
+    function startEditCake(id) {
+      store.commit('qcakem/setEditedItem', id);
+      operationText.value ='Редактировать торт';
+      isEditMode.value = true;
     };
     function deleteCake(id) {
       console.log('Удалить торт '+id)
       //store.commit('qcakem/setEditedItem',id);
       //openEditDialog();
     };
-    function openEditDialog() {
-      //dialog.value = true;
-    };
     return {
-      addNewCake,
-      editCake,
+      startAddNewCake,
+      startEditCake,
       deleteCake,
       isEditMode,
-      openEditDialog,
+      operationText,
     };
 
   }

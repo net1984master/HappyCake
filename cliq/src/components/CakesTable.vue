@@ -16,7 +16,7 @@
           color="primary"
           icon-right="add"
           no-caps
-          @click="dialog = true"
+          @click="$emit('add')"
         >Добавить
         </q-btn>
       </div>
@@ -45,7 +45,7 @@
             flat
             round
             icon="edit"
-            @click="editItem(props.row.id)"
+            @click="$emit('edit',props.row.id)"
           ></q-btn>
         </q-td>
         <q-td :props="props">
@@ -55,7 +55,7 @@
             flat
             round
             icon="delete"
-            @click="deleteItem(props.row.id)"
+            @click="$emit('delete',props.row.id)"
           ></q-btn>
         </q-td>
       </div>

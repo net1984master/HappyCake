@@ -1,7 +1,11 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <cakes-table/>
+      <cakes-table
+        @add="addNewCake"
+        @edit="editCake"
+        @delete="deleteCake"
+      />
 
       <q-dialog
         v-model="dialog"
@@ -53,11 +57,16 @@ export default {
     onMounted(() => {
       store.dispatch('qcakem/getAll');
     });
-    function editItem(id) {
+    function addNewCake(){
+      console.log("Добавить новый пост");
+    }
+    function editCake(id) {
+      console.log('Редактировать торт '+id)
       //store.commit('qcakem/setEditedItem',id);
       //openEditDialog();
     };
-    function deleteItem(id) {
+    function deleteCake(id) {
+      console.log('Удалить торт '+id)
       //store.commit('qcakem/setEditedItem',id);
       //openEditDialog();
     };
@@ -65,10 +74,12 @@ export default {
       //dialog.value = true;
     };
     return {
+      addNewCake,
+      editCake,
+      deleteCake,
       dialog,
       maximizedToggle: ref(true),
       openEditDialog,
-      editItem,
     };
 
   }

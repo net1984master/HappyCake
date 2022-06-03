@@ -37,8 +37,8 @@
       </q-input>
     </template>
     <template v-slot:body-cell-action="props">
-      <div>
-        <q-td :props="props">
+      <q-td :props="props">
+        <div class="action__btns">
           <q-btn
             color="primary"
             dense
@@ -46,9 +46,8 @@
             round
             icon="edit"
             @click="$emit('edit',props.row.id)"
+            title="Редактировать"
           ></q-btn>
-        </q-td>
-        <q-td :props="props">
           <q-btn
             color="negative"
             dense
@@ -56,9 +55,10 @@
             round
             icon="delete"
             @click="$emit('delete',props.row.id)"
+            title="Удалить"
           ></q-btn>
-        </q-td>
-      </div>
+        </div>
+      </q-td>
     </template>
   </q-table>
 </template>
@@ -69,17 +69,17 @@ import {computed, ref} from "vue";
 
 export default {
   name: "CakesTable",
-  setup(){
+  setup() {
     const store = useStore();
     const filter = ref('');
     const rows = computed(() => store.state.qcakem.cakes);
     const columns = [
-      {name: 'name',required: true,label: 'id',align: 'left',field: 'id',sortable: true},
+      {name: 'name', required: true, label: 'id', align: 'left', field: 'id', sortable: true},
       {name: 'name', align: 'left', label: 'Название', field: 'name', sortable: true},
       {name: 'description', align: 'left', label: 'Описание', field: 'description', sortable: true},
       {name: "action", align: "center", label: "Действия", field: ""}
     ];
-    return{
+    return {
       rows,
       columns,
       filter
@@ -89,5 +89,8 @@ export default {
 </script>
 
 <style scoped>
-
+.action__btns{
+  display: flex;
+  justify-content: space-around;
+}
 </style>

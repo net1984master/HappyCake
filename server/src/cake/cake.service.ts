@@ -26,8 +26,12 @@ export class CakeService {
     return `This action returns a #${id} cake`;
   }
 
-  update(id: number, updateCakeDto: UpdateCakeDto) {
-    return `This action updates a #${id} cake`;
+  async update(id: number, updateCakeDto: UpdateCakeDto) {
+    /*const cake = new Cake();
+    cake.id
+    cake.name = updateCakeDto.name;
+    cake.description = updateCakeDto.description;*/
+    return this.cakeRepo.save(updateCakeDto);
   }
 
   remove(id: number) {
